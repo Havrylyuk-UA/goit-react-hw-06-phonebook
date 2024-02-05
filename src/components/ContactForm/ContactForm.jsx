@@ -1,6 +1,16 @@
+import { useSelector, useDispatch } from 'react-redux';
+import { nanoid } from 'nanoid';
+import { getContact } from '../../redux/selectors';
+
+import { addContact } from '../../redux/contactsSlice';
+
 import './ContactForm.css';
 
-const ContactForm = ({ contacts, handlePushContact }) => {
+const ContactForm = () => {
+  const contacts = useSelector(getContact);
+
+  const dispatch = useDispatch();
+
   const handlePushForm = e => {
     e.preventDefault();
 
@@ -13,7 +23,7 @@ const ContactForm = ({ contacts, handlePushContact }) => {
       return alert(`${name} is already in contact!`);
     }
 
-    handlePushContact(name, number);
+    dispatch(addContact({ id: nanoid(10), name, number }));
     resetForm(form);
   };
 
