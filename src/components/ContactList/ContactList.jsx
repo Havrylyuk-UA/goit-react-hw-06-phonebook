@@ -1,33 +1,25 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { getContact, getFilter } from '../../redux/selectors';
-import { removeContact } from '../../redux/contactsSlice';
+import { selectVisibleContacts } from '../../redux/selectors';
+import { deleteContact } from '../../redux/operations';
 
 import './ContactList.css';
 import ContactListItem from '../ContactListItem/ContactListItem';
 
 const ContactList = () => {
-  const contacts = useSelector(getContact);
-
-  const filter = useSelector(getFilter);
+  const contacts = useSelector(selectVisibleContacts);
 
   const dispatch = useDispatch();
 
-  const handleRemoveContact = contactId => dispatch(removeContact(contactId));
-
-  const filteredContactList = filter
-    ? contacts.filter(item =>
-        item.name.toLowerCase().includes(filter.toLowerCase())
-      )
-    : contacts;
+  const handleRemoveContact = id => dispatch(deleteContact(id));
 
   return (
     <ul>
-      {filteredContactList.map(({ id, name, number }) => {
+      {contacts.map(({ id, name, phone }) => {
         return (
           <ContactListItem
             key={id}
             name={name}
-            number={number}
+            number={phone}
             handleRemoveContact={() => handleRemoveContact(id)}
           />
         );
